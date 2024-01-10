@@ -5,7 +5,9 @@ import "fmt"
 func main() {
 	rb_tree := NewRBTree(20)
 
-	rb_tree.Insert(11)
+	for i := 0; i < 100000; i++ {
+		rb_tree.Insert(11)
+	}
 
 	fmt.Println(rb_tree)
 }
@@ -13,8 +15,8 @@ func main() {
 type Color int
 
 const (
-	RED Color = iota
-	BLACK
+	RED   Color = iota //0
+	BLACK              //1
 )
 
 type Node struct {
