@@ -5,11 +5,11 @@ import "fmt"
 func main() {
 	rb_tree := NewRBTree(20)
 
-	for i := 0; i < 100000; i++ {
-		rb_tree.Insert(11)
-	}
+	rb_tree.Insert(11)
+	rb_tree.Insert(12)
+	rb_tree.Insert(14)
 
-	fmt.Println(rb_tree)
+	fmt.Println(rb_tree.memory[0])
 }
 
 type Color int
@@ -90,47 +90,105 @@ func (tree *RBTree) Insert(key int) {
 	} else if newNode.Key > parentNode.Key {
 		parentNode.Right = newNode
 	} else {
-		//save new value :D
+		//!save new value :D
 		return //if the find the same key
 	}
+
+	//making balanced tree
+	for parentNode.Parent != nil && parentNode.Color == RED {
+		grandparentNode := parentNode.Parent
+
+		if parentNode == grandparentNode.Left {
+			uncle := grandparentNode.Right
+
+			if uncle != nil && uncle.Color == RED {
+				grandparentNode.Color = RED
+				parentNode.Color = BLACK
+				uncle.Color = BLACK
+				newNode = grandparentNode
+			} else {
+				if newNode == parentNode.Right {
+					newNode = parentNode
+					tree.rotateLeft(newNode)
+				}
+
+				parentNode.Color = BLACK
+				grandparentNode.Color = RED
+				tree.rotateRight(grandparentNode)
+			}
+		} else {
+			uncle := grandparentNode.Left
+
+			if uncle != nil && uncle.Color == RED {
+				grandparentNode.Color = RED
+				parentNode.Color = BLACK
+				uncle.Color = BLACK
+				newNode = grandparentNode
+			} else {
+				if newNode == parentNode.Left {
+					newNode = parentNode
+					tree.rotateRight(newNode)
+				}
+
+				parentNode.Color = BLACK
+				grandparentNode.Color = RED
+				tree.rotateLeft(grandparentNode)
+			}
+		}
+		parentNode = newNode.Parent
+	}
+
+	tree.root.Color = BLACK
 }
 
-// func (n *Node) rotateLeft() *Node {
-// 	rChild := n.Right
-// 	n.Right = rChild.Left
-// 	if rChild.Left != nil {
-// 		rChild.Left.Parent = n
-// 	}
-// 	rChild.Parent = n.Parent
-// 	if n.Parent == nil {
-// 		// n is root
-// 		root = rChild
-// 	} else if n == n.Parent.Left {
-// 		n.Parent.Left = rChild
-// 	} else {
-// 		n.Parent.Right = rChild
-// 	}
-// 	rChild.Left = n
-// 	n.Parent = rChild
-// 	return rChild
-// }
+// here will exist one copy of element (one node more), why?
+// we will set our node as root, but we don't know where is
+// this element in memory slice, because of that we will old
+// root set on end of slice (end is our pointer)
+func (tree *RBTree) RootSwap(node *Node) {
+	// tree.pointer++ //Provide space for a new node.
+	// tree.memory[0], tree.memory[tree.capacity] = node, tree.memory[0]
 
-// func (n *Node) rotateRight() *Node {
-// 	lChild := n.Left
-// 	n.Left = lChild.Right
-// 	if lChild.Right != nil {
-// 		lChild.Right.Parent = n
-// 	}
-// 	lChild.Parent = n.Parent
-// 	if n.Parent == nil {
-// 		// n is root
-// 		root = lChild
-// 	} else if n == n.Parent.Right {
-// 		n.Parent.Right = lChild
-// 	} else {
-// 		n.Parent.Left = lChild
-// 	}
-// 	lChild.Right = n
-// 	n.Parent = lChild
-// 	return lChild
-// }
+	//?????
+	tree.root, node = node, tree.root
+}
+
+// make left rotation in RBTree
+func (tree *RBTree) rotateLeft(n *Node) {
+	rChild := n.Right
+	n.Right = rChild.Left
+	if rChild.Left != nil {
+		rChild.Left.Parent = n
+	}
+	rChild.Parent = n.Parent
+	if n.Parent == nil {
+		// n is root
+		tree.RootSwap(n)
+	} else if n == n.Parent.Left {
+		n.Parent.Left = rChild
+	} else {
+		n.Parent.Right = rChild
+	}
+	rChild.Left = n
+	n.Parent = rChild
+}
+
+// make right rotation in RBTree
+func (tree *RBTree) rotateRight(n *Node) {
+	lChild := n.Left
+	n.Left = lChild.Right
+	if lChild.Right != nil {
+		lChild.Right.Parent = n
+	}
+	lChild.Parent = n.Parent
+	if n.Parent == nil {
+		// n is root
+		tree.RootSwap(n)
+	} else if n == n.Parent.Right {
+		n.Parent.Right = lChild
+	} else {
+		n.Parent.Left = lChild
+	}
+	lChild.Right = n
+	n.Parent = lChild
+}

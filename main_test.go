@@ -5,6 +5,10 @@ import (
 	"testing"
 )
 
+func TestRootSwap(t *testing.T) {
+	// rb_tree := NewRBTree(20)
+}
+
 func BenchmarkByteCompare(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		bytes.Compare([]byte("Rotation are fundamental operations that help in maintaining the Red-Black Tree properties. There are two types of rotations: left rotation and right rotation."), []byte("Rotations are fundamental operations that help in maintaining the Red-Black Tree properties. There are two types of rotations: left rotation and right rotation."))
@@ -21,6 +25,6 @@ func BenchmarkRBTree(b *testing.B) {
 	rb_tree := NewRBTree(20000)
 
 	for i := 0; i < b.N; i++ {
-		rb_tree.Insert(12)
+		rb_tree.Insert(int(11))
 	}
 }
