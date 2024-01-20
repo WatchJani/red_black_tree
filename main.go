@@ -1,15 +1,27 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
 func main() {
-	rb_tree := NewRBTree(20)
+	tree := NewRBTree(20)
 
-	rb_tree.Insert(11)
-	rb_tree.Insert(12)
-	rb_tree.Insert(14)
+	for _, value := range []int{18, 11, 6, 50, 40} {
+		tree.Insert(value)
+	}
 
-	fmt.Println(rb_tree.memory[0])
+	fmt.Println(tree.memory[1]) //root
+	fmt.Println(tree.memory[2]) //left
+	fmt.Println(tree.memory[0]) //right
+	fmt.Println(tree.memory[3]) //right
+	fmt.Println(tree.memory[4]) //right
+
+	// for _, value := range []int{50, 40} {
+	// 	fmt.Println(value)
+	// 	tree.Insert(value)
+	// }
+
 }
 
 type Color int
@@ -49,11 +61,15 @@ func NewNode(key int) *Node {
 	}
 }
 
+func (tree *RBTree) Reset() {
+	tree.pointer = 0
+}
+
 func (tree *RBTree) AddNode(key int) *Node {
 	tree.pointer++
 
 	if tree.pointer == tree.capacity {
-		tree.pointer = 0
+		tree.Reset()
 	}
 
 	tree.memory[tree.pointer] = NewNode(key)
@@ -67,46 +83,48 @@ func (tree *RBTree) Insert(key int) {
 
 	if tree.root == nil { //Done
 		tree.root = newNode
-		return
-	}
+	} else {
+		currentNode := tree.root
+		var parentNode *Node
 
-	currentNode := tree.root
-	var parentNode *Node
+		//find parent for our newNode
+		for currentNode != nil {
+			parentNode = currentNode
+			if newNode.Key < currentNode.Key {
+				currentNode = currentNode.Left
+			} else {
+				currentNode = currentNode.Right
+			}
+		}
 
-	//find parent for our newNode
-	for currentNode != nil {
-		parentNode = currentNode
-		if newNode.Key < currentNode.Key {
-			currentNode = currentNode.Left
+		//Set parentNode to our NewNode
+		newNode.Parent = parentNode
+		if newNode.Key < parentNode.Key {
+			parentNode.Left = newNode
+		} else if newNode.Key > parentNode.Key {
+			parentNode.Right = newNode
 		} else {
-			currentNode = currentNode.Right
+			//!save new value :D
+			return //if the find the same key
 		}
 	}
 
-	//Set parentNode to our NewNode
-	newNode.Parent = parentNode
-	if newNode.Key < parentNode.Key {
-		parentNode.Left = newNode
-	} else if newNode.Key > parentNode.Key {
-		parentNode.Right = newNode
-	} else {
-		//!save new value :D
-		return //if the find the same key
-	}
+	parentNode := newNode.Parent //get the parent of new node
 
 	//making balanced tree
-	for parentNode.Parent != nil && parentNode.Color == RED {
-		grandparentNode := parentNode.Parent
+	for parentNode != nil && parentNode.Color == RED {
+		grandparentNode := parentNode.Parent // get parent of parent, that we can came to uncle
 
+		//Check uncle, if parent left of grandparent then uncle is right
 		if parentNode == grandparentNode.Left {
-			uncle := grandparentNode.Right
+			uncle := grandparentNode.Right //get the uncle
 
-			if uncle != nil && uncle.Color == RED {
+			if uncle != nil && uncle.Color == RED { //if uncle exist and if red then recolor
 				grandparentNode.Color = RED
 				parentNode.Color = BLACK
 				uncle.Color = BLACK
 				newNode = grandparentNode
-			} else {
+			} else { //if uncle not exist then rotate and recolor
 				if newNode == parentNode.Right {
 					newNode = parentNode
 					tree.rotateLeft(newNode)
@@ -137,20 +155,7 @@ func (tree *RBTree) Insert(key int) {
 		}
 		parentNode = newNode.Parent
 	}
-
 	tree.root.Color = BLACK
-}
-
-// here will exist one copy of element (one node more), why?
-// we will set our node as root, but we don't know where is
-// this element in memory slice, because of that we will old
-// root set on end of slice (end is our pointer)
-func (tree *RBTree) RootSwap(node *Node) {
-	// tree.pointer++ //Provide space for a new node.
-	// tree.memory[0], tree.memory[tree.capacity] = node, tree.memory[0]
-
-	//?????
-	tree.root, node = node, tree.root
 }
 
 // make left rotation in RBTree
@@ -163,7 +168,7 @@ func (tree *RBTree) rotateLeft(n *Node) {
 	rChild.Parent = n.Parent
 	if n.Parent == nil {
 		// n is root
-		tree.RootSwap(n)
+		tree.root = rChild
 	} else if n == n.Parent.Left {
 		n.Parent.Left = rChild
 	} else {
@@ -183,7 +188,7 @@ func (tree *RBTree) rotateRight(n *Node) {
 	lChild.Parent = n.Parent
 	if n.Parent == nil {
 		// n is root
-		tree.RootSwap(n)
+		tree.root = lChild
 	} else if n == n.Parent.Right {
 		n.Parent.Right = lChild
 	} else {
