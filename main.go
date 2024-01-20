@@ -1,25 +1,26 @@
 package main
 
-import "fmt"
-
 func main() {
-	tree := NewRBTree(20)
+	// tree := NewRBTree(20)
 
-	for _, value := range []int{18, 11, 6, 50, 40} {
-		tree.Insert(value)
-	}
-
-	fmt.Println(tree.memory[1]) //root
-	fmt.Println(tree.memory[2]) //left
-	fmt.Println(tree.memory[0]) //right
-	fmt.Println(tree.memory[3]) //right
-	fmt.Println(tree.memory[4]) //right
+	// for i := 0; i < 100; i++ {
+	// 	num := rand.Intn(40000)
+	// 	tree.Insert(num)
+	// }
 
 	// for _, value := range []int{50, 40} {
 	// 	fmt.Println(value)
 	// 	tree.Insert(value)
 	// }
 
+	// for value := range tree.InOrderTraversal() {
+	// 	saver := -1
+	// 	if saver < value {
+	// 		saver = value
+	// 	} else {
+	// 		fmt.Println("bug", saver, value)
+	// 	}
+	// }
 }
 
 type Color int
@@ -196,3 +197,25 @@ func (tree *RBTree) rotateRight(n *Node) {
 	lChild.Right = n
 	n.Parent = lChild
 }
+
+// func (tree *RBTree) InOrderTraversal() []int {
+// 	result := make([]int, 0)
+// 	stack := make([]*Node, 0)
+// 	current := tree.root
+
+// 	for current != nil || len(stack) > 0 {
+// 		for current != nil {
+// 			stack = append(stack, current)
+// 			current = current.Left
+// 		}
+
+// 		current = stack[len(stack)-1]
+// 		stack = stack[:len(stack)-1]
+
+// 		result = append(result, current.Key)
+
+// 		current = current.Right
+// 	}
+
+// 	return result
+// }
