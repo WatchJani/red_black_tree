@@ -126,8 +126,8 @@ func (tree *RBTree) Insert(key int) {
 				newNode = grandparentNode
 			} else { //if uncle not exist then rotate and recolor
 				if newNode == parentNode.Right {
-					newNode = parentNode
-					tree.rotateLeft(newNode)
+					// newNode = parentNode
+					tree.rotateLeft(parentNode)
 				}
 
 				parentNode.Color = BLACK
@@ -144,8 +144,8 @@ func (tree *RBTree) Insert(key int) {
 				newNode = grandparentNode
 			} else {
 				if newNode == parentNode.Left {
-					newNode = parentNode
-					tree.rotateRight(newNode)
+					// newNode = parentNode
+					tree.rotateRight(parentNode)
 				}
 
 				parentNode.Color = BLACK
@@ -155,6 +155,7 @@ func (tree *RBTree) Insert(key int) {
 		}
 		parentNode = newNode.Parent
 	}
+
 	tree.root.Color = BLACK
 }
 
