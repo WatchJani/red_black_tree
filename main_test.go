@@ -26,6 +26,6 @@ func BenchmarkRBTree(b *testing.B) {
 	rb_tree := NewRBTree(b.N)
 
 	for i := 0; i < b.N; i++ {
-		rb_tree.Insert(rand.Intn(100000))
+		rb_tree.Insert(rand.Intn(40000))
 	}
 }

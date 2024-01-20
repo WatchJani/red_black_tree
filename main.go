@@ -1,8 +1,6 @@
 package main
 
-import (
-	"fmt"
-)
+import "fmt"
 
 func main() {
 	tree := NewRBTree(20)
@@ -126,8 +124,8 @@ func (tree *RBTree) Insert(key int) {
 				newNode = grandparentNode
 			} else { //if uncle not exist then rotate and recolor
 				if newNode == parentNode.Right {
-					// newNode = parentNode
 					tree.rotateLeft(parentNode)
+					newNode, parentNode = parentNode, newNode
 				}
 
 				parentNode.Color = BLACK
@@ -144,8 +142,8 @@ func (tree *RBTree) Insert(key int) {
 				newNode = grandparentNode
 			} else {
 				if newNode == parentNode.Left {
-					// newNode = parentNode
 					tree.rotateRight(parentNode)
+					newNode, parentNode = parentNode, newNode
 				}
 
 				parentNode.Color = BLACK
