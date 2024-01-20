@@ -43,6 +43,7 @@ type RBTree struct {
 	memory   []*Node
 	pointer  int
 	capacity int
+	result   []int
 }
 
 func NewRBTree(capacity int) *RBTree {
@@ -50,6 +51,7 @@ func NewRBTree(capacity int) *RBTree {
 		memory:   make([]*Node, capacity),
 		pointer:  -1,
 		capacity: capacity,
+		result:   make([]int, 0, capacity),
 	}
 }
 
@@ -167,7 +169,7 @@ func (tree *RBTree) rotateLeft(n *Node) {
 	}
 	rChild.Parent = n.Parent
 	if n.Parent == nil {
-		// n is root
+		// lChild is new root
 		tree.root = rChild
 	} else if n == n.Parent.Left {
 		n.Parent.Left = rChild
@@ -187,7 +189,7 @@ func (tree *RBTree) rotateRight(n *Node) {
 	}
 	lChild.Parent = n.Parent
 	if n.Parent == nil {
-		// n is root
+		// lChild is new root
 		tree.root = lChild
 	} else if n == n.Parent.Right {
 		n.Parent.Right = lChild
@@ -198,24 +200,23 @@ func (tree *RBTree) rotateRight(n *Node) {
 	n.Parent = lChild
 }
 
-// func (tree *RBTree) InOrderTraversal() []int {
-// 	result := make([]int, 0)
-// 	stack := make([]*Node, 0)
-// 	current := tree.root
+func (tree *RBTree) InOrderTraversal() []int {
+	stack := make([]*Node, 0, 10)
+	current := tree.root
 
-// 	for current != nil || len(stack) > 0 {
-// 		for current != nil {
-// 			stack = append(stack, current)
-// 			current = current.Left
-// 		}
+	for current != nil || len(stack) > 0 {
+		for current != nil {
+			stack = append(stack, current)
+			current = current.Left
+		}
 
-// 		current = stack[len(stack)-1]
-// 		stack = stack[:len(stack)-1]
+		current = stack[len(stack)-1]
+		stack = stack[:len(stack)-1] //fix that
 
-// 		result = append(result, current.Key)
+		tree.result = append(tree.result, current.Key)
 
-// 		current = current.Right
-// 	}
+		current = current.Right
+	}
 
-// 	return result
-// }
+	return tree.result
+}
