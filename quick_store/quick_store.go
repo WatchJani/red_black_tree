@@ -73,3 +73,8 @@ func (q QuickStore[T]) GetById(id int) T {
 
 	return q.store[id]
 }
+
+// reset our store, we haw 0 elements in store
+func (q *QuickStore[T]) Reset() {
+	q.pointer = -1
+}
