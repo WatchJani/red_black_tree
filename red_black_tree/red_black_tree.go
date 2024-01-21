@@ -21,10 +21,11 @@ type Node struct {
 }
 
 type RBTree struct {
-	root     *Node
-	memory   []*Node
-	pointer  int
-	capacity int
+	root *Node
+	//quick store???
+	memory   []*Node //memory need to be dynamic, maybe i should use quick store -> array
+	pointer  int     //pointer is from quick store -> len()
+	capacity int     //capacity is from quick store -> cap()
 
 	result []int //ReadBlackTree
 	stack  q.QuickStore[*Node]

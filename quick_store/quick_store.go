@@ -1,5 +1,7 @@
 package quick_store
 
+import "fmt"
+
 type QuickStore[T any] struct {
 	store    []T
 	pointer  int
@@ -21,7 +23,7 @@ func New[T any](capacity int) QuickStore[T] {
 func (q *QuickStore[T]) Append(item T) {
 	q.pointer++
 
-	if q.pointer > q.capacity {
+	if q.pointer == q.capacity {
 		q.Grow()
 	}
 
@@ -58,7 +60,16 @@ func (q QuickStore[T]) Len() int {
 	return q.pointer
 }
 
-// return
+// return all element in our store
 func (q QuickStore[T]) GetStore() []T {
 	return q.store[:q.pointer]
+}
+
+// get element from store on specific place by index
+func (q QuickStore[T]) GetById(id int) T {
+	if id < 0 || id > q.capacity {
+		panic(fmt.Sprintf("[QuickStore] This index [%d] is not exist", id))
+	}
+
+	return q.store[id]
 }
