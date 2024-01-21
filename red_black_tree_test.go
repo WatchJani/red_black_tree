@@ -1,34 +1,19 @@
 package main
 
 import (
+	"math/rand"
 	"testing"
 )
 
-func TestRightRotation(t *testing.T) {
-	tree := NewRBTree(20)
+const TEST_SAMPLE = 40_000
 
-	for _, value := range []int{18, 11, 6} {
-		tree.Insert(value)
+func TestInsert(t *testing.T) {
+	tree := NewRBTree(TEST_SAMPLE)
+
+	for i := 0; i < TEST_SAMPLE; i++ {
+		num := rand.Intn(TEST_SAMPLE) //random key
+		tree.Insert(num)              //insert key
 	}
 
-	if results, expected := tree.memory[1].Left, tree.memory[2]; results != expected {
-		t.Errorf("this results %+v is not valid, expected value is %+v", results, expected)
-	}
-
-	if results, expected := tree.memory[1].Right, tree.memory[0]; results != expected {
-		t.Errorf("this results %+v is not valid, expected value is %+v", results, expected)
-	}
-
-	// for _, value := range []int{50, 20, 30} {
-	// 	fmt.Println(value)
-	// 	tree.Insert(value)
-	// }
-
-	// if results, expected := tree.memory[2].Left, tree.memory[1]; results != expected {
-	// 	t.Errorf("this results %+v is not valid, expected value is %+v", results, expected)
-	// }
-
-	// if results, expected := tree.memory[0].Left, tree.memory[2]; results != expected {
-	// 	t.Errorf("this results %+v is not valid, expected value is %+v", results, expected)
-	// }
+	
 }

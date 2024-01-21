@@ -1,26 +1,17 @@
 package main
 
+import (
+	"fmt"
+	"math"
+	q "root/quick_store"
+)
+
 func main() {
-	// tree := NewRBTree(20)
+	fmt.Println(math.Log2(40000))
 
-	// for i := 0; i < 100; i++ {
-	// 	num := rand.Intn(40000)
-	// 	tree.Insert(num)
-	// }
+	data := make([]int, 20)
+	fmt.Println(data)
 
-	// for _, value := range []int{50, 40} {
-	// 	fmt.Println(value)
-	// 	tree.Insert(value)
-	// }
-
-	// for value := range tree.InOrderTraversal() {
-	// 	saver := -1
-	// 	if saver < value {
-	// 		saver = value
-	// 	} else {
-	// 		fmt.Println("bug", saver, value)
-	// 	}
-	// }
 }
 
 type Color int
@@ -43,7 +34,9 @@ type RBTree struct {
 	memory   []*Node
 	pointer  int
 	capacity int
-	result   []int
+
+	result []int //ReadBlackTree
+	stack  q.QuickStore[*Node]
 }
 
 func NewRBTree(capacity int) *RBTree {
@@ -51,7 +44,9 @@ func NewRBTree(capacity int) *RBTree {
 		memory:   make([]*Node, capacity),
 		pointer:  -1,
 		capacity: capacity,
-		result:   make([]int, 0, capacity),
+
+		result: make([]int, 0, capacity), //0 => append
+		stack:  q.New[*Node](int(math.Log2(float64(capacity)))),
 	}
 }
 
@@ -200,18 +195,37 @@ func (tree *RBTree) rotateRight(n *Node) {
 	n.Parent = lChild
 }
 
-func (tree *RBTree) InOrderTraversal() []int {
-	stack := make([]*Node, 0, 10)
+// func (tree *RBTree) InOrderTraversal() []int {
+// 	current := tree.root
+
+// 	for current != nil || len(tree.stack) > 0 {
+// 		for current != nil {
+// 			tree.stack = append(tree.stack, current)
+// 			current = current.Left
+// 		}
+
+// 		current = tree.stack[len(tree.stack)-1]
+// 		tree.stack = tree.stack[:len(tree.stack)-1] //fix that
+
+// 		tree.result = append(tree.result, current.Key)
+
+// 		current = current.Right
+// 	}
+
+// 	return tree.result
+// }
+
+func (tree *RBTree) InOrderTraversal2() []int {
 	current := tree.root
 
-	for current != nil || len(stack) > 0 {
+	for current != nil || tree.stack.Len() > 0 { //len
 		for current != nil {
-			stack = append(stack, current)
+			tree.stack.Append(current) //add
 			current = current.Left
 		}
 
-		current = stack[len(stack)-1]
-		stack = stack[:len(stack)-1] //fix that
+		current = tree.stack.Get() //get
+		tree.stack.Delete()        //delete
 
 		tree.result = append(tree.result, current.Key)
 
