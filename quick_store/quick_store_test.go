@@ -4,7 +4,7 @@ import (
 	"testing"
 )
 
-// test insert of our storage
+// test adding to our quick store
 func TestInsert(t *testing.T) {
 	lite_store := New[int](20)
 
@@ -28,3 +28,5 @@ func TestInsert(t *testing.T) {
 		}
 	}
 }
+
+
