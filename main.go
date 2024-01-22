@@ -2,8 +2,7 @@ package main
 
 import (
 	"fmt"
-	"math/rand"
-	"root/quick_store"
+	"root/smart_buffer"
 )
 
 func main() {
@@ -15,22 +14,24 @@ func main() {
 
 	// fmt.Println(tree.InOrderTraversal())
 
-	liteStore := quick_store.New[int](20)
+	// liteStore := quick_store.New[int](20)
 
-	num := rand.Intn(20)
+	// num := rand.Intn(20)
 
-	for index := 0; index < num; index++ {
-		liteStore.Append(index)
-	}
+	// for index := 0; index < num; index++ {
+	// 	liteStore.Append(index)
+	// }
 
-	fmt.Println(num)
-	liteStore.Delete()
-	fmt.Println(liteStore.Len())
-	fmt.Println(liteStore.GetStore())
+	// fmt.Println(num)
+	// liteStore.Delete()
+	// fmt.Println(liteStore.Len())
+	// fmt.Println(liteStore.GetStore())
 
-	// buff := smart_buffer.New(4096)
+	buff := smart_buffer.New(8)
 
-	// buff.Buff([]byte("Janko je car"))
+	buff.Buff([]byte("ja"))
+	buff.Buff([]byte("janko"))
+	buff.Buff([]byte("janko"))
 
-	// fmt.Println(buff.GetStore())
+	fmt.Println(string(buff.GetStoreAll()))
 }

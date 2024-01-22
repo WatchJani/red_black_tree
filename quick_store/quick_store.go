@@ -64,6 +64,10 @@ func (q QuickStore[T]) GetStore() []T {
 	return q.store[:q.pointer]
 }
 
+func (q *QuickStore[T]) GetStoreAll() []T {
+	return q.store
+}
+
 // get element from store on specific place by index
 func (q QuickStore[T]) GetById(id int) T {
 	if id < 0 || id > q.capacity {
@@ -78,6 +82,16 @@ func (q *QuickStore[T]) Reset() {
 	q.pointer = 0
 }
 
-func (q *QuickStore[T]) GetPointer() int {
+// return pointer which are on the last element
+func (q QuickStore[T]) GetPointer() int {
 	return q.pointer - 1
+}
+
+// custom pointer size
+func (q *QuickStore[T]) SetPointer(size int) {
+	q.pointer += size
+}
+
+func (q QuickStore[T]) GetCapacity() int {
+	return q.capacity
 }
