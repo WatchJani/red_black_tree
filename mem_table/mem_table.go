@@ -11,6 +11,6 @@ type Saver struct {
 }
 
 type MemTable struct {
-	red_black_tree.RBTree
+	red_black_tree.RBTree[string, Saver]
 	smart_buffer.SBuff
 }

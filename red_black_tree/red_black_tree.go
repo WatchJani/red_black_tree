@@ -12,55 +12,56 @@ const (
 	BLACK              //1
 )
 
-type Node struct {
-	Key    int
+type Node[K string | int, V any] struct {
+	Key    K
+	Value  V
 	Color  Color
-	Parent *Node
-	Left   *Node
-	Right  *Node
+	Parent *Node[K, V]
+	Left   *Node[K, V]
+	Right  *Node[K, V]
 }
 
-type RBTree struct {
-	root   *Node
-	memory q.QuickStore[*Node]
+type RBTree[K string | int, V any] struct {
+	root   *Node[K, V]
+	memory q.QuickStore[*Node[K, V]]
 	// memory   []*Node //memory need to be dynamic, maybe i should use quick store -> array
 	// pointer  int     //pointer is from quick store -> len()
 	// capacity int     //capacity is from quick store -> cap()
 
-	result []int //ReadBlackTree
-	stack  q.QuickStore[*Node]
+	result []K //ReadBlackTree
+	stack  q.QuickStore[*Node[K, V]]
 }
 
-func NewRBTree(capacity int) *RBTree {
-	return &RBTree{
-		memory: q.New[*Node](capacity),
+func NewRBTree[K string | int, V any](capacity int) *RBTree[K, V] {
+	return &RBTree[K, V]{
+		memory: q.New[*Node[K, V]](capacity),
 
-		result: make([]int, 0, capacity), //0 => append
-		stack:  q.New[*Node](int(math.Log2(float64(capacity)))),
+		result: make([]K, 0, capacity), //0 => append
+		stack:  q.New[*Node[K, V]](int(math.Log2(float64(capacity)))),
 	}
 }
 
-func NewNode(key int) *Node {
-	return &Node{
+func NewNode[K string | int, V any](key K, value V) *Node[K, V] {
+	return &Node[K, V]{
 		Key:   key,
 		Color: RED,
 	}
 }
 
-func (tree *RBTree) AddNode(key int) *Node {
-	tree.memory.Append(NewNode(key))
+func (tree *RBTree[K, V]) AddNode(key K, value V) *Node[K, V] {
+	tree.memory.Append(NewNode(key, value))
 
 	return tree.memory.Get()
 }
 
-func (tree *RBTree) Insert(key int) {
-	newNode := tree.AddNode(key)
+func (tree *RBTree[K, V]) Insert(key K, value V) {
+	newNode := tree.AddNode(key, value)
 
 	if tree.root == nil {
 		tree.root = newNode
 	} else {
 		currentNode := tree.root
-		var parentNode *Node
+		var parentNode *Node[K, V]
 
 		//find parent for our newNode
 		for currentNode != nil {
@@ -135,7 +136,7 @@ func (tree *RBTree) Insert(key int) {
 }
 
 // make left rotation in RBTree
-func (tree *RBTree) rotateLeft(n *Node) {
+func (tree *RBTree[K, V]) rotateLeft(n *Node[K, V]) {
 	rChild := n.Right
 	n.Right = rChild.Left
 	if rChild.Left != nil {
@@ -155,7 +156,7 @@ func (tree *RBTree) rotateLeft(n *Node) {
 }
 
 // make right rotation in RBTree
-func (tree *RBTree) rotateRight(n *Node) {
+func (tree *RBTree[K, V]) rotateRight(n *Node[K, V]) {
 	lChild := n.Left
 	n.Left = lChild.Right
 	if lChild.Right != nil {
@@ -174,7 +175,7 @@ func (tree *RBTree) rotateRight(n *Node) {
 	n.Parent = lChild
 }
 
-func (tree *RBTree) InOrderTraversal() []int {
+func (tree *RBTree[K, V]) InOrderTraversal() []K {
 	current := tree.root
 
 	for current != nil || tree.stack.Len() > 0 { //len
@@ -193,23 +194,3 @@ func (tree *RBTree) InOrderTraversal() []int {
 
 	return tree.result
 }
-
-// func (tree *RBTree) InOrderTraversal() []int {
-// 	current := tree.root
-
-// 	for current != nil || len(tree.stack) > 0 {
-// 		for current != nil {
-// 			tree.stack = append(tree.stack, current)
-// 			current = current.Left
-// 		}
-
-// 		current = tree.stack[len(tree.stack)-1]
-// 		tree.stack = tree.stack[:len(tree.stack)-1] //fix that
-
-// 		tree.result = append(tree.result, current.Key)
-
-// 		current = current.Right
-// 	}
-
-// 	return tree.result
-// }
