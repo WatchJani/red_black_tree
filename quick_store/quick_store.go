@@ -15,19 +15,18 @@ func New[T any](capacity int) QuickStore[T] {
 	return QuickStore[T]{
 		store:    make([]T, capacity),
 		capacity: capacity,
-		pointer:  -1,
+		pointer:  0,
 	}
 }
 
 // Add new element to store
 func (q *QuickStore[T]) Append(item T) {
-	q.pointer++
-
 	if q.pointer == q.capacity {
 		q.Grow()
 	}
 
 	q.store[q.pointer] = item
+	q.pointer++
 }
 
 // Allocate more space in memory for our items => 2x more
@@ -52,7 +51,7 @@ func (q *QuickStore[T]) Delete() {
 
 // return to us last value from our store
 func (q QuickStore[T]) Get() T {
-	return q.store[q.pointer]
+	return q.store[q.pointer-1]
 }
 
 // return to us number of element in our store
@@ -76,5 +75,9 @@ func (q QuickStore[T]) GetById(id int) T {
 
 // reset our store, we haw 0 elements in store
 func (q *QuickStore[T]) Reset() {
-	q.pointer = -1
+	q.pointer = 0
+}
+
+func (q *QuickStore[T]) GetPointer() int {
+	return q.pointer - 1
 }

@@ -72,6 +72,8 @@ func TestDelete(t *testing.T) {
 		liteStore.Append(index)
 	}
 
+	liteStore.Delete()
+
 	if actualValue, expectedValue := liteStore.Len(), num-1; actualValue != expectedValue {
 		t.Errorf("Got %v | expected %v", actualValue, expectedValue)
 	}
