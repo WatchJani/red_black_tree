@@ -1,6 +1,7 @@
 package mem_table
 
 import (
+	"fmt"
 	r "root/red_black_tree"
 	s "root/smart_buffer"
 )
@@ -35,6 +36,21 @@ func NewMemTable(capacity int) *MemTable {
 }
 
 func (m *MemTable) InsertData(id string, data []byte) {
-	m.tree.Insert(id, NewSaver(m.unsorted.Len(), len(data))) //insert to Red Black Tree
-	m.unsorted.Buff(data)                                    //data in the buffer
+	m.tree.Insert(id, NewSaver(m.unsorted.Len(), m.unsorted.Len()+len(data))) //insert to Red Black Tree
+	m.unsorted.Buff(data)                                                     //data in the buffer
+}
+
+func (m MemTable) GetUnsorted() s.SBuff {
+	return m.unsorted
+}
+
+func (m MemTable) GetSorted() s.SBuff {
+	return m.sorted
+}
+
+// previse sekvencijalno, treba u realnom vremenu da se obradjuje pine pline
+func (m *MemTable) Flush() {
+	for _, data := range m.tree.InOrderTraversal() {
+		fmt.Println(data)
+	}
 }

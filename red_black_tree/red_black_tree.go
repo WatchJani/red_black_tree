@@ -25,7 +25,7 @@ type RBTree[K string | int, V any] struct {
 	root   *Node[K, V]
 	memory q.QuickStore[*Node[K, V]]
 
-	result []K //ReadBlackTree
+	result []V //ReadBlackTree
 	stack  q.QuickStore[*Node[K, V]]
 }
 
@@ -33,7 +33,7 @@ func NewRBTree[K string | int, V any](capacity int) RBTree[K, V] {
 	return RBTree[K, V]{
 		memory: q.New[*Node[K, V]](capacity),
 
-		result: make([]K, 0, capacity), //0 => append
+		result: make([]V, 0, capacity), //0 => append
 		stack:  q.New[*Node[K, V]](int(math.Log2(float64(capacity)))),
 	}
 }
@@ -41,6 +41,7 @@ func NewRBTree[K string | int, V any](capacity int) RBTree[K, V] {
 func NewNode[K string | int, V any](key K, value V) *Node[K, V] {
 	return &Node[K, V]{
 		Key:   key,
+		Value: value,
 		Color: RED,
 	}
 }
@@ -172,7 +173,7 @@ func (tree *RBTree[K, V]) rotateRight(n *Node[K, V]) {
 	n.Parent = lChild
 }
 
-func (tree *RBTree[K, V]) InOrderTraversal() []K {
+func (tree *RBTree[K, V]) InOrderTraversal() []V {
 	current := tree.root
 
 	for current != nil || tree.stack.Len() > 0 { //len
@@ -183,11 +184,10 @@ func (tree *RBTree[K, V]) InOrderTraversal() []K {
 
 		current = tree.stack.Get() //get
 		tree.stack.Delete()        //delete
-
-		tree.result = append(tree.result, current.Key)
+		tree.result = append(tree.result, current.Value)
 
 		current = current.Right
 	}
 
-	return tree.result
+	return tree.result[:tree.memory.Len()]
 }
