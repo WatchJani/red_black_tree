@@ -27,11 +27,14 @@ func main() {
 	// fmt.Println(liteStore.Len())
 	// fmt.Println(liteStore.GetStore())
 
-	buff := smart_buffer.New(8)
+	buff := smart_buffer.New(10)
 
 	buff.Buff([]byte("ja"))
-	buff.Buff([]byte("janko"))
-	buff.Buff([]byte("janko"))
+	fmt.Println(string(buff.GetStoreAll()))
 
+	buff.Buff([]byte("jankoe"))
+	fmt.Println(string(buff.GetStoreAll()))
+
+	buff.Buff([]byte("janko"))
 	fmt.Println(string(buff.GetStoreAll()))
 }
