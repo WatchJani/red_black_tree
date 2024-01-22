@@ -24,9 +24,6 @@ type Node[K string | int, V any] struct {
 type RBTree[K string | int, V any] struct {
 	root   *Node[K, V]
 	memory q.QuickStore[*Node[K, V]]
-	// memory   []*Node //memory need to be dynamic, maybe i should use quick store -> array
-	// pointer  int     //pointer is from quick store -> len()
-	// capacity int     //capacity is from quick store -> cap()
 
 	result []K //ReadBlackTree
 	stack  q.QuickStore[*Node[K, V]]
@@ -68,8 +65,11 @@ func (tree *RBTree[K, V]) Insert(key K, value V) {
 			parentNode = currentNode
 			if newNode.Key < currentNode.Key {
 				currentNode = currentNode.Left
-			} else {
+			} else if newNode.Key > currentNode.Key {
 				currentNode = currentNode.Right
+			} else {
+				newNode.Key = key
+				return //if the find the same key
 			}
 		}
 
@@ -79,9 +79,6 @@ func (tree *RBTree[K, V]) Insert(key K, value V) {
 			parentNode.Left = newNode
 		} else if newNode.Key > parentNode.Key {
 			parentNode.Right = newNode
-		} else {
-			//!save new value :D
-			return //if the find the same key
 		}
 	}
 

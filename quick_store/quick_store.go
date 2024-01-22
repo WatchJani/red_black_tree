@@ -8,8 +8,6 @@ type QuickStore[T any] struct {
 	capacity int
 }
 
-// func New[T int | string | bool | float32 | float64](capacity int) *QuickStore[T] {
-
 // capacity is the space for our store (space can dynamic be expanded 2x)
 func New[T any](capacity int) QuickStore[T] {
 	return QuickStore[T]{
@@ -92,6 +90,7 @@ func (q *QuickStore[T]) SetPointer(size int) {
 	q.pointer += size
 }
 
+// return capacity initialized memory for quick store
 func (q QuickStore[T]) GetCapacity() int {
 	return q.capacity
 }

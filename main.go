@@ -2,17 +2,18 @@ package main
 
 import (
 	"fmt"
-	"root/smart_buffer"
+	"math/rand"
+	"root/red_black_tree"
 )
 
 func main() {
-	// tree := red_black_tree.NewRBTree(300)
+	tree := red_black_tree.NewRBTree[int, int](300)
 
-	// for i := 0; i < 300; i++ {
-	// 	tree.Insert(rand.Intn(5000))
-	// }
+	for i := 0; i < 300; i++ {
+		tree.Insert(rand.Intn(5000), 5)
+	}
 
-	// fmt.Println(tree.InOrderTraversal())
+	fmt.Println(tree.InOrderTraversal())
 
 	// liteStore := quick_store.New[int](20)
 
@@ -27,14 +28,14 @@ func main() {
 	// fmt.Println(liteStore.Len())
 	// fmt.Println(liteStore.GetStore())
 
-	buff := smart_buffer.New(10)
+	// buff := smart_buffer.New(10)
 
-	buff.Buff([]byte("ja"))
-	fmt.Println(string(buff.GetStore()))
+	// buff.Buff([]byte("ja"))
+	// fmt.Println(string(buff.GetStore()))
 
-	buff.Buff([]byte("jankoe"))
-	fmt.Println(string(buff.GetStore()))
+	// buff.Buff([]byte("jankoe"))
+	// fmt.Println(string(buff.GetStore()))
 
-	buff.Buff([]byte("janko"))
-	fmt.Println(string(buff.GetStore()))
+	// buff.Buff([]byte("janko"))
+	// fmt.Println(string(buff.GetStore()))
 }

@@ -27,7 +27,7 @@ func Test(t *testing.T) {
 }
 
 // insert new key in red black tree
-// 175ns
+// 146ns
 func BenchmarkRBTreeInsert(b *testing.B) {
 	b.StopTimer()
 
