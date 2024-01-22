@@ -21,9 +21,7 @@ type Node struct {
 }
 
 type RBTree struct {
-	root *Node
-	//quick store???
-
+	root   *Node
 	memory q.QuickStore[*Node]
 	// memory   []*Node //memory need to be dynamic, maybe i should use quick store -> array
 	// pointer  int     //pointer is from quick store -> len()
@@ -36,9 +34,6 @@ type RBTree struct {
 func NewRBTree(capacity int) *RBTree {
 	return &RBTree{
 		memory: q.New[*Node](capacity),
-		// memory:   make([]*Node, capacity),
-		// pointer:  -1,
-		// capacity: capacity,
 
 		result: make([]int, 0, capacity), //0 => append
 		stack:  q.New[*Node](int(math.Log2(float64(capacity)))),
@@ -52,29 +47,16 @@ func NewNode(key int) *Node {
 	}
 }
 
-// func (tree *RBTree) Reset() {
-// 	tree.pointer = 0
-// }
-
 func (tree *RBTree) AddNode(key int) *Node {
-	// tree.pointer++
-
-	// if tree.pointer == tree.capacity {
-	// 	tree.Reset()
-	// }
-
-	// tree.memory[tree.pointer] = NewNode(key)
-
 	tree.memory.Append(NewNode(key))
 
 	return tree.memory.Get()
 }
 
-// 100ns
 func (tree *RBTree) Insert(key int) {
-	newNode := tree.AddNode(key) //Done
+	newNode := tree.AddNode(key)
 
-	if tree.root == nil { //Done
+	if tree.root == nil {
 		tree.root = newNode
 	} else {
 		currentNode := tree.root

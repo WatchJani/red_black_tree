@@ -30,11 +30,11 @@ func main() {
 	buff := smart_buffer.New(10)
 
 	buff.Buff([]byte("ja"))
-	fmt.Println(string(buff.GetStoreAll()))
+	fmt.Println(string(buff.GetStore()))
 
 	buff.Buff([]byte("jankoe"))
-	fmt.Println(string(buff.GetStoreAll()))
+	fmt.Println(string(buff.GetStore()))
 
 	buff.Buff([]byte("janko"))
-	fmt.Println(string(buff.GetStoreAll()))
+	fmt.Println(string(buff.GetStore()))
 }

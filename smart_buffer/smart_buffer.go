@@ -8,7 +8,7 @@ type SBuff struct {
 
 func New(capacity int) *SBuff {
 	return &SBuff{
-		QuickStore: q.New[byte](capacity), //need be custom because my pointer count from -1
+		QuickStore: q.New[byte](capacity),
 	}
 }
 
