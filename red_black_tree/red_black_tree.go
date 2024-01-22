@@ -29,8 +29,8 @@ type RBTree[K string | int, V any] struct {
 	stack  q.QuickStore[*Node[K, V]]
 }
 
-func NewRBTree[K string | int, V any](capacity int) *RBTree[K, V] {
-	return &RBTree[K, V]{
+func NewRBTree[K string | int, V any](capacity int) RBTree[K, V] {
+	return RBTree[K, V]{
 		memory: q.New[*Node[K, V]](capacity),
 
 		result: make([]K, 0, capacity), //0 => append

@@ -6,8 +6,8 @@ type SBuff struct {
 	q.QuickStore[byte]
 }
 
-func New(capacity int) *SBuff {
-	return &SBuff{
+func New(capacity int) SBuff {
+	return SBuff{
 		QuickStore: q.New[byte](capacity),
 	}
 }
