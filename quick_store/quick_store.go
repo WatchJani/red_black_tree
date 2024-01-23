@@ -94,3 +94,7 @@ func (q *QuickStore[T]) SetPointer(size int) {
 func (q QuickStore[T]) GetCapacity() int {
 	return q.capacity
 }
+
+func (q QuickStore[T]) Check(data int) bool {
+	return q.pointer+data > q.capacity
+}

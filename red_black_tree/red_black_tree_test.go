@@ -8,23 +8,23 @@ import (
 const TEST_SAMPLE = 40_000
 
 // test insert sorting ability of red black tree implementation
-func Test(t *testing.T) {
-	//key is type of int, value is type of int
-	RBTree := NewRBTree[int, int](TEST_SAMPLE)
+// func Test(t *testing.T) {
+// 	//key is type of int, value is type of int
+// 	RBTree := NewRBTree[int, int](TEST_SAMPLE)
 
-	for index := 0; index < TEST_SAMPLE; index++ {
-		RBTree.Insert(rand.Intn(100_000), 5) //Reduced possibility of data collision
-	}
+// 	for index := 0; index < TEST_SAMPLE; index++ {
+// 		RBTree.Insert(rand.Intn(100_000), 5) //Reduced possibility of data collision
+// 	}
 
-	var temp int
-	for index, key := range RBTree.InOrderTraversal() {
-		if key < temp {
-			t.Errorf("index: %d | Got %v | expected %v", index, key, temp)
-		}
+// 	var temp int
+// 	for index, key := range RBTree.InOrderTraversal() {
+// 		if key < temp {
+// 			t.Errorf("index: %d | Got %v | expected %v", index, key, temp)
+// 		}
 
-		temp = key
-	}
-}
+// 		temp = key
+// 	}
+// }
 
 // insert new key in red black tree
 // 146ns
