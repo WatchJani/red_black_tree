@@ -13,11 +13,6 @@ func New(capacity int) SBuff {
 }
 
 func (s *SBuff) Buff(data []byte) {
-	if s.Len()+len(data) > s.Cap() {
-		//flush to disk
-		s.Reset()
-	}
-
 	copy(s.GetStoreAll()[s.Len():], data)
 	s.SetPointer(len(data))
 }

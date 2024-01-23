@@ -10,8 +10,12 @@ import (
 	s "root/smart_buffer"
 )
 
+//todo
+//Queues for next disc write
+//implementation for check if buffer ready or not
+
 // 8_388_608
-const MB_8 int = 1_388_608
+const MB_8 int = 1_388_608 // for testing
 
 type Saver struct {
 	start int
@@ -120,7 +124,8 @@ func (m *MemTable) Flush() error {
 	}
 
 	//make usable again
-	m.unsorted[m.pointer].Reset()
+	m.unsorted[1].Reset()
+	m.unsorted[0].Reset()
 
 	//write on disk and return error
 	return Write(m.sorted.GetStore())
@@ -147,10 +152,10 @@ func GenerateRandomString(length int) (string, error) {
 	return hex.EncodeToString(bytes), nil
 }
 
-// func (m MemTable) GetUnsorted() s.SBuff {
-// 	return m.unsorted
-// }
+func (m MemTable) GetUnsorted() []GreenBuffer {
+	return m.unsorted
+}
 
-// func (m MemTable) GetSorted() s.SBuff {
-// 	return m.sorted
-// }
+func (m MemTable) GetSorted() GreenBuffer {
+	return m.sorted
+}

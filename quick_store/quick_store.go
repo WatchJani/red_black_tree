@@ -62,6 +62,7 @@ func (q QuickStore[T]) GetStore() []T {
 	return q.store[:q.pointer]
 }
 
+// get slice
 func (q *QuickStore[T]) GetStoreAll() []T {
 	return q.store
 }
@@ -95,6 +96,7 @@ func (q QuickStore[T]) GetCapacity() int {
 	return q.capacity
 }
 
+// check is buffer full
 func (q QuickStore[T]) Check(data int) bool {
 	return q.pointer+data > q.capacity
 }
