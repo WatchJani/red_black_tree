@@ -46,6 +46,11 @@ func NewNode[K string | int, V any](key K, value V) *Node[K, V] {
 	}
 }
 
+// red black tree memory reset
+func (tree *RBTree[K, V]) Reset() {
+	tree.memory.Reset()
+}
+
 func (tree *RBTree[K, V]) AddNode(key K, value V) *Node[K, V] {
 	tree.memory.Append(NewNode(key, value))
 

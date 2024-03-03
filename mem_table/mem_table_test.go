@@ -1,17 +1,26 @@
-package mem_table_test
+package mem_table
 
 import (
 	"fmt"
 	"math/rand"
-	"root/mem_table"
 	"testing"
 )
 
-var TEST_INPUT []byte = []byte(`{"id": 123,"ime": "Branko","prezime": "Doe","dob": 30,"email": "john.doe@example.com","adresa": {"ulica": "123 Main Street", "grad": "Cityville", "država": "State", "poštanski_broj": "12345"},"telefoni": [{"tip": "mobilni","broj": "555-1234"},{"tip": "fiksni","broj": "555-5678"}]}\n`)
+// // 181 words 2,547 characters
+var TEST_INPUT []byte = []byte(`[
+    {"color": "red", "value": "#f00"},
+    {"color": "green", "value": "#0f0"},
+    {"color": "blue", "value": "#00f"},
+    {"color": "cyan", "value": "#0ff"},
+    {"color": "magenta", "value": "#f0f"},
+    {"color": "yellow", "value": "#ff0"},
+    {"color": "black", "value": "#000"}
+]
+`)
 
 func BenchmarkInsertDataToBuf(b *testing.B) {
 	b.StopTimer()
-	mem := mem_table.NewMemTable(40000)
+	mem := NewMemTable(40000)
 	generatedID := make([]string, b.N)
 
 	for i := 0; i < b.N; i++ {
@@ -21,13 +30,14 @@ func BenchmarkInsertDataToBuf(b *testing.B) {
 	b.StartTimer()
 
 	for i := 0; i < b.N; i++ {
-		mem.InsertData(generatedID[i], TEST_INPUT)
+		for j := 0; j < 40_000; j++ {
+			mem.InsertData(generatedID[i], TEST_INPUT)
+		}
 	}
 }
 
-func Benchmark(b *testing.B) {
-	b.StopTimer()
-	mem := mem_table.NewMemTable(40000)
+func BenchmarkStressTest(b *testing.B) {
+	mem := NewMemTable(40000)
 	generatedID := make([]string, b.N)
 
 	for i := 0; i < b.N; i++ {
@@ -35,12 +45,7 @@ func Benchmark(b *testing.B) {
 	}
 
 	b.StartTimer()
-
-	mem.Listen()
-
 	for i := 0; i < b.N; i++ {
-		mem.Save(generatedID[i], TEST_INPUT)
+		mem.InsertData(generatedID[i], TEST_INPUT)
 	}
-
-	mem.Close()
 }

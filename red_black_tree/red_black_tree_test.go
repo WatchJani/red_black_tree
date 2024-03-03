@@ -1,6 +1,7 @@
 package red_black_tree
 
 import (
+	"fmt"
 	"math/rand"
 	"testing"
 )
@@ -46,6 +47,25 @@ func BenchmarkRBTreeInsert(b *testing.B) {
 	}
 }
 
+// bug??? 500ns
+func BenchmarkRBTreeInsertString(b *testing.B) {
+	b.StopTimer()
+
+	//key is type of int, value is type of int
+	RBTree := NewRBTree[string, int](b.N)
+	data := make([]string, b.N)
+
+	for index := range data {
+		data[index] = fmt.Sprintf("%d", rand.Intn(500_000))
+	}
+
+	b.StartTimer()
+
+	for i := 0; i < b.N; i++ {
+		RBTree.Insert(data[i], 5)
+	}
+}
+
 // read 40_000 sorted elements in red black tree
 // 2023ns
 func BenchmarkReadAll(b *testing.B) {
@@ -62,5 +82,25 @@ func BenchmarkReadAll(b *testing.B) {
 	//test our implementation
 	for i := 0; i < b.N; i++ {
 		RBTree.InOrderTraversal()
+	}
+}
+
+func BenchmarkRBTreeInsert40_000(b *testing.B) {
+	b.StopTimer()
+
+	//key is type of int, value is type of int
+	RBTree := NewRBTree[string, int](b.N)
+	data := make([]string, 40_000)
+
+	for index := range data {
+		data[index] = fmt.Sprintf("%d", rand.Intn(500_000))
+	}
+
+	b.StartTimer()
+
+	for i := 0; i < b.N; i++ {
+		for j := 0; j < 40_000; j++ {
+			RBTree.Insert(data[j], 5)
+		}
 	}
 }
